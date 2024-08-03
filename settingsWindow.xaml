@@ -1,0 +1,52 @@
+﻿<Window x:Class="folderSynch.settingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:folderSynch"
+        mc:Ignorable="d"
+        Title="settingsWindow" Height="463" Width="246">
+
+    <Window.Resources>
+        <Style TargetType="Label">
+
+            <Setter Property="Foreground" Value="Black"></Setter>
+
+            <Setter Property="FontSize" Value="16"></Setter>
+
+
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF621414" />
+            <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="FontFamily" Value="Bahnschrift SemiBold"></Setter>
+            <Setter Property="Border.CornerRadius" Value="10,20,20,30"></Setter>
+            <Setter Property="FontSize" Value="16"></Setter>
+
+
+        </Style>
+    </Window.Resources>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="RoyalBlue">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel  Orientation="Vertical" >
+            <StackPanel.Resources>
+                <Style TargetType="ComboBox">
+                    <Setter Property="Margin" Value="0,0,0,20" ></Setter>
+
+                </Style>
+            </StackPanel.Resources>
+            <Label>Time to automatic synch (min)</Label>
+            <ComboBox Name="time_to_Synch" FontSize="18"></ComboBox>
+            <Label>Name of APP (tray name)</Label>
+            <TextBox x:Name="inputTextBox" FontSize="24"></TextBox>
+            <CheckBox x:Name="bootChechBox" Margin="0,20,0,0" FontSize="16" Content="Turn on whe boot up" Checked="bootChechBox_Checked"></CheckBox>
+
+        </StackPanel>
+        <Button Content="Save" FontSize="30" HorizontalAlignment="Right"  VerticalAlignment="Bottom" Click="Button_Click" Margin="0,0,10,10" Height="43" Width="113"/>
+
+
+    </Grid>
+</Window>

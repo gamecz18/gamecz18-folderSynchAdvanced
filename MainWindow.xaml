@@ -1,0 +1,91 @@
+﻿<Window x:Class="folderSynch.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:folderSynch"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" ResizeMode="CanResize" MinHeight="400" MinWidth="400">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="Red"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="FontFamily" Value="Bahnschrift SemiBold"></Setter>
+            <Setter Property="FontSize" Value="16"></Setter>
+
+
+        </Style>
+    </Window.Resources>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray">
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition></RowDefinition>
+            <RowDefinition/>
+            <RowDefinition Height="0.3*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.6*" ></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="0.6*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Grid.RowSpan="6" Grid.ColumnSpan="6" BorderBrush="DarkRed" BorderThickness="5,0,0,0" HorizontalAlignment="Center" />
+        <StackPanel Background="PowderBlue" Grid.ColumnSpan="4" Grid.Column="0" Panel.ZIndex="0" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            
+                <ProgressBar x:Name="prubeh" Margin="0,10,0,0" Height="20" />
+        </StackPanel>
+
+        <Button Grid.Column="3" Grid.Row="5" Name="buttonDes"  Content="des. folder select" RenderTransformOrigin="0.675,0.695"  Click="buttonDes_Click" Grid.RowSpan="2"  MinHeight="20"/>
+        <Button Grid.Row="5" Grid.Column="0" x:Name="buttonSec"  Content="source folder select" RenderTransformOrigin="0.675,0.695"  Click="buttonSec_Click" MinHeight="20"/>
+        <ListView Background="DarkGray" x:Name="desctiFilesView" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="1" Grid.RowSpan="3">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="350"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView Background="DarkGray" x:Name="sourceFilesView" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="3">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="350"/>
+
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label Content="Počet s.:" Name="sourceCount"  Grid.Column="0" Grid.Row="4" HorizontalAlignment="Stretch"  />
+        <Label Content="Cesta: " Grid.ColumnSpan="2" Panel.ZIndex="3" Name="sourcePath" Grid.Column="0" Grid.Row="4" Margin="0,28,0,5" />
+
+
+
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.ColumnSpan="2"  Grid.RowSpan="2" Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.6*"></ColumnDefinition>
+                <ColumnDefinition Width="0.4*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition  Width="0.5*"></ColumnDefinition>
+                <ColumnDefinition  Width="0.5*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button x:Name="synchButton" Grid.Column="0" Padding="0,0,0,2" Content="synch once"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontFamily="Bahnschrift SemiBold" Click="synchButton_Click" />
+            <Button x:Name="settingsButton" Grid.Column="1" Padding="0,0,0,2" Content="Settings"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontFamily="Bahnschrift SemiBold" Click="settingsButton_Click"/>
+            <Button Grid.Column="2" x:Name="synchOnBackButton" Padding="0,0,0,2" Content="synch on backround"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Click="synchOnBackButton_Click"/>
+            <Button Grid.Column="3" x:Name="saveSesButton"  Padding="0,0,0,2" Content="Save setting"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Click="saveSesButton_Click"/>
+            <Button Grid.Column="4" x:Name="loadSesButton" Padding="0,0,0,2" Content="Load setting"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Click="loadSesButton_Click"/>
+
+
+        </Grid>
+        <StackPanel Grid.Column="2" Panel.ZIndex="0" Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Label Content="Počet s.:" x:Name="desCount"/>
+            <Label Content="Cesta: " HorizontalAlignment="Left" x:Name="desPath" Width="398"/>
+
+        </StackPanel>
+        <Button x:Name="reloadButton" Grid.Column="3" Content="Reload" HorizontalAlignment="Right" Grid.Row="4" VerticalAlignment="Top" Width="61" Click="reloadButton_Click"/>
+
+    </Grid>
+</Window>
