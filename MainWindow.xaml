@@ -35,8 +35,9 @@
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" Grid.RowSpan="6" Grid.ColumnSpan="6" BorderBrush="DarkRed" BorderThickness="5,0,0,0" HorizontalAlignment="Center" />
         <StackPanel Background="PowderBlue" Grid.ColumnSpan="4" Grid.Column="0" Panel.ZIndex="0" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            
-                <ProgressBar x:Name="prubeh" Margin="0,10,0,0" Height="20" />
+
+            <ProgressBar x:Name="prubeh" Margin="0,10,0,0" Height="20" />
+            <CheckBox x:Name="checkBoxSynchFolders" Content="CheckBox"/>
         </StackPanel>
 
         <Button Grid.Column="3" Grid.Row="5" Name="buttonDes"  Content="des. folder select" RenderTransformOrigin="0.675,0.695"  Click="buttonDes_Click" Grid.RowSpan="2"  MinHeight="20"/>
@@ -72,7 +73,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <Button x:Name="synchButton" Grid.Column="0" Padding="0,0,0,2" Content="synch once"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontFamily="Bahnschrift SemiBold" Click="synchButton_Click" />
+            <Button x:Name="synchButton" Grid.Column="0" Padding="0,0,0,2" Content="synch once" HorizontalAlignment="Right" FontFamily="Bahnschrift SemiBold" Click="synchButton_Click" Width="100" />
             <Button x:Name="settingsButton" Grid.Column="1" Padding="0,0,0,2" Content="Settings"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FontFamily="Bahnschrift SemiBold" Click="settingsButton_Click"/>
             <Button Grid.Column="2" x:Name="synchOnBackButton" Padding="0,0,0,2" Content="synch on backround"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Click="synchOnBackButton_Click"/>
             <Button Grid.Column="3" x:Name="saveSesButton"  Padding="0,0,0,2" Content="Save setting"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Click="saveSesButton_Click"/>
@@ -86,6 +87,7 @@
 
         </StackPanel>
         <Button x:Name="reloadButton" Grid.Column="3" Content="Reload" HorizontalAlignment="Right" Grid.Row="4" VerticalAlignment="Top" Width="61" Click="reloadButton_Click"/>
-
+        <Button Click="Button_Click" Grid.Column="1" Margin="10,0,90,82" Grid.RowSpan="2"></Button>
     </Grid>
+
 </Window>

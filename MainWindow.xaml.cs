@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,7 +23,7 @@ namespace folderSynch
         {
             InitializeComponent();
             folders.loadSettings();
-            
+
             //slouží pro pracovaní s tímto oknem u jiných knihove(UI prvky)
             Instance = this;
             //notifikační ikona
@@ -34,7 +35,7 @@ namespace folderSynch
             {
                 _nf.ContextMenuStrip.Items.Add(folders.jmenoInstance);
             }
-            
+
             _nf.ContextMenuStrip.Items.Add("Stop", null, NotifyIcon_Click);
 
             if (folders.bootOnStartup)
@@ -54,7 +55,7 @@ namespace folderSynch
 
         public delegate void MethodInvoker();
 
-        
+
         protected override void OnClosing(CancelEventArgs e)
         {
             _nf.Dispose();
@@ -129,7 +130,7 @@ namespace folderSynch
         async void sych()
         {
 
-            if (string.IsNullOrEmpty( folders.destinacionFolder)  || string.IsNullOrEmpty( folders.sourseFolder))
+            if (string.IsNullOrEmpty(folders.destinacionFolder) || string.IsNullOrEmpty(folders.sourseFolder))
             {
                 System.Windows.Forms.MessageBox.Show("One folder or more folders are not selected.", "Warning", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                 return;
@@ -137,26 +138,130 @@ namespace folderSynch
 
 
             disEnabElement(false);
-            await Task.Run(async () =>
+            if (checkBoxSynchFolders.IsChecked.Value)
             {
 
-                try
-                {
-                    folders.pocetZmen = 0;
-                    synch.checkFiles(folders.sourseFolder, true, ref synch.sourceInfo);
-                    synch.checkFiles(folders.destinacionFolder, false, ref synch.desInfo);
-                    await Task.Run(() => synch.copyFiles(prubeh));
-
-
-                }
-                catch (System.Exception err)
+                searchFolder.listFoldersSource.Clear();
+                searchFolder.listFoldersDes.Clear();
+                Task T1 = new Task(() =>
                 {
 
-                    Forms.MessageBox.Show(err.Message, "Nastala chybu u synch", Forms.MessageBoxButtons.OK, Forms.MessageBoxIcon.Asterisk);
-                    disEnabElement(true);
-                }
+                    searchFolder.findFolders(folders.sourseFolder, searchFolder.listFoldersSource, folders.sourseFolder);
 
-            });
+                });
+                Task T2 = new Task(() =>
+                {
+
+                    searchFolder.findFolders(folders.destinacionFolder, searchFolder.listFoldersDes, folders.destinacionFolder);
+
+                });
+                T1.Start();
+                T2.Start();
+
+                await Task.Run(() =>
+                {
+                    do
+                    {
+
+                    } while (T1.Status.Equals(TaskStatus.Running) || T2.Status.Equals(TaskStatus.Running));
+                });
+
+                
+                Thread.Sleep(333);
+                string baseSourceFolder = folders.sourseFolder;
+                string baseDesFolder = folders.destinacionFolder;
+                foreach (var item in searchFolder.listFoldersDes.Where(x => !searchFolder.listFoldersSource.Any(p => p.cestaInside.Contains(x.cestaInside))))
+                {
+                    if (Directory.Exists((baseDesFolder + item.cestaInside)))
+                    {
+                        Directory.Delete((baseDesFolder + item.cestaInside), true);
+                    }
+                   
+                    //searchFolder.listFoldersDes.Remove(item);
+                }
+                await Task.Run(() =>
+                {
+                    foreach (var item in searchFolder.listFoldersSource)
+                    {
+
+
+
+                        if (!Directory.Exists(baseDesFolder + item.cestaInside))
+                        {
+                            Directory.CreateDirectory(baseDesFolder + item.cestaInside);
+
+
+                        }
+                        folders.destinacionFolder = baseDesFolder + item.cestaInside;
+                        folders.sourseFolder = item.cesta;
+                        Thread.Sleep(250);
+
+
+                        try
+                        {
+                            folders.pocetZmen = 0;
+                            synch.checkFiles(folders.sourseFolder, true, synch.sourceInfo);
+                            synch.checkFiles(folders.destinacionFolder, false, synch.desInfo);
+                            //await Task.Run(() => synch.copyFiles(prubeh));
+                            synch.copyFiles(prubeh);
+
+                            /* JumpItem:
+                                 if (t1.Status != TaskStatus.RanToCompletion)
+                                 {
+                                     goto JumpItem;
+                                 }
+                               */
+                          // Thread.Sleep(550);
+
+
+                        }
+                        catch (System.Exception err)
+                        {
+
+                            Forms.MessageBox.Show(err.Message, "Nastala chybu u synch", Forms.MessageBoxButtons.OK, Forms.MessageBoxIcon.Asterisk);
+                            disEnabElement(true);
+                        }
+
+
+
+                        /*skok:
+                        if (t1.Status != TaskStatus.RanToCompletion)
+                        {
+                            goto skok;
+                        }*/
+                        //synch.desInfo.Clear();
+                        //synch.sourceInfo.Clear();
+
+                    }
+                });
+                disEnabElement(true);
+            }
+            else
+            {
+
+
+                await Task.Run(async () =>
+                {
+
+                    try
+                    {
+                        folders.pocetZmen = 0;
+                        synch.checkFiles(folders.sourseFolder, true, synch.sourceInfo);
+                        synch.checkFiles(folders.destinacionFolder, false, synch.desInfo);
+                        await Task.Run(() => synch.copyFiles(prubeh));
+                        disEnabElement(true);
+
+
+                    }
+                    catch (System.Exception err)
+                    {
+
+                        Forms.MessageBox.Show(err.Message, "Nastala chybu u synch", Forms.MessageBoxButtons.OK, Forms.MessageBoxIcon.Asterisk);
+                        disEnabElement(true);
+                    }
+
+                });
+            }
 
 
 
@@ -189,12 +294,13 @@ namespace folderSynch
 
 
 
-        public  async void  reload()
+        public async void reload()
         {
 
-            if (string.IsNullOrEmpty( folders.destinacionFolder)) return;
+            if (string.IsNullOrEmpty(folders.destinacionFolder)) return;
             this.desctiFilesView.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal,
-                      () => {
+                      () =>
+                      {
                           desctiFilesView.Items.Clear();
                       });
             int pocet = 0;
@@ -211,25 +317,28 @@ namespace folderSynch
                 }
             });
             this.desCount.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, () => { desCount.Content = $"Počet s.: {pocet}"; });
-                
+
 
         }
         private void reloadButton_Click(object sender, RoutedEventArgs e)
         {
+            //znovu načte listbox
             reload();
-            
+
         }
 
         private void saveSesButton_Click(object sender, RoutedEventArgs e)
         {
+            //uloží nastavení složek
             folders.saveSettings();
         }
 
 
         void createIcon()
         {
-                        
+
             //_nf.Click += NotifyIcon_Click;
+            //zobrazí ikonu
             _nf.Visible = true;
             synchOnBackgourd();
 
@@ -238,7 +347,7 @@ namespace folderSynch
 
         void cancleIcon()
         {
-            _nf.Visible =false;
+            _nf.Visible = false;
         }
 
 
@@ -260,11 +369,12 @@ namespace folderSynch
         }
 
 
-        CancellationToken ct1 = new CancellationToken(); 
+        CancellationToken ct1 = new CancellationToken();
         CancellationTokenSource cts1 = new CancellationTokenSource();
         void synchOnBackgourd()
         {
-            Task.Run(() => {
+            Task.Run(() =>
+            {
 
 
                 while (true)
@@ -276,23 +386,23 @@ namespace folderSynch
                     {
                         ct1.ThrowIfCancellationRequested();
                     }
-                  
-                }
-                                    
-            
-            }, cts1.Token);
-        
 
-        
+                }
+
+
+            }, cts1.Token);
+
+
+
         }
 
         private async void loadSesButton_Click(object sender, RoutedEventArgs e)
         {
             folders.loadSettings();
-            if (string.IsNullOrEmpty( folders.sourseFolder))
+            if (string.IsNullOrEmpty(folders.sourseFolder))
             {
 
-                
+
                 sourceCount.Content = $"Počet s. ";
                 sourcePath.Content = $"Cesta:  ";
 
@@ -327,22 +437,32 @@ namespace folderSynch
             {
                 reload();
             }
-            
 
-           
-            
+
+
+
 
         }
 
         private void settingsButton_Click(object sender, RoutedEventArgs e)
         {
             settingsWindow st1 = new settingsWindow();
-            
+
             if (st1.ShowDialog() == true)
             {
-               
+
 
             }
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                searchFolder.findFolders(folders.sourseFolder, searchFolder.listFoldersSource, folders.sourseFolder);
+
+            });
+            return;
         }
     }
 

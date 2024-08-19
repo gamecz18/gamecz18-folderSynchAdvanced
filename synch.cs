@@ -33,7 +33,7 @@ namespace folderSynch
     {
         public static List<filesInfo> sourceInfo = new List<filesInfo>();
         public static List<filesInfo> desInfo = new List<filesInfo>();
-        static public void checkFiles(string folder, bool source, ref List<filesInfo> files)
+        static public void checkFiles(string folder, bool source, List<filesInfo> files)
         {
             
             foreach (var item in Directory.GetFiles(folder))
@@ -82,10 +82,17 @@ namespace folderSynch
 
         static public async void copyFiles(ProgressBar pb1)
         {
-            await Task.Run(() =>
+            Task t1 = Task.Run(() =>
             {
                 checkExistance();
             });
+            
+
+            do
+            {
+
+            } while (t1.Status != TaskStatus.RanToCompletion);
+
             pb1.Dispatcher.Invoke(() =>
             {
                 pb1.Maximum = folders.pocetZmen;
@@ -126,7 +133,7 @@ namespace folderSynch
                     if (chyba == 15)
                     {
                         chyba = 0;
-                       System.Windows.Forms.MessageBox.Show(err.Message, "Erro", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Asterisk);
+                       System.Windows.Forms.MessageBox.Show(err.Message, "Error synch ", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Asterisk);
                     }
                     chyba++;
                     goto skok;
@@ -135,7 +142,7 @@ namespace folderSynch
 
             }
             MainWindow.Instance.reload();
-            MainWindow.Instance.disEnabElement(true);
+            //MainWindow.Instance.disEnabElement(true);
             sourceInfo.Clear();
             desInfo.Clear();
 
