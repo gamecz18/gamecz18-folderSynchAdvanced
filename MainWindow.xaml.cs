@@ -37,7 +37,7 @@ namespace folderSynch
             }
 
             _nf.ContextMenuStrip.Items.Add("Stop", null, NotifyIcon_Click);
-
+            checkBoxSynchFolders.IsChecked = folders.synchAllFoldes;
             if (folders.bootOnStartup)
             {
                 synchOnBack();
@@ -138,7 +138,7 @@ namespace folderSynch
 
 
             disEnabElement(false);
-            if (checkBoxSynchFolders.IsChecked.Value)
+            if (folders.synchAllFoldes)
             {
 
                 searchFolder.listFoldersSource.Clear();
@@ -170,11 +170,28 @@ namespace folderSynch
                 Thread.Sleep(333);
                 string baseSourceFolder = folders.sourseFolder;
                 string baseDesFolder = folders.destinacionFolder;
+                bool deleteTry = true;
                 foreach (var item in searchFolder.listFoldersDes.Where(x => !searchFolder.listFoldersSource.Any(p => p.cestaInside.Contains(x.cestaInside))))
                 {
+                    
                     if (Directory.Exists((baseDesFolder + item.cestaInside)))
                     {
-                        Directory.Delete((baseDesFolder + item.cestaInside), true);
+                        try
+                        {
+                            DirectoryInfo df1 = new DirectoryInfo((baseDesFolder + item.cestaInside));
+                            df1.Attributes = FileAttributes.Normal;
+                            Directory.Delete((baseDesFolder + item.cestaInside), true);
+                        }
+                        catch(Exception err )
+                        {
+                            if (deleteTry)
+                            {
+                                MessageBox.Show(err.Message + " Folder: " + (baseDesFolder + item.cestaInside), "This file can not be deleted try running as admin", MessageBoxButton.OK, MessageBoxImage.Stop);
+                                deleteTry = !deleteTry;
+                            }
+
+                        }
+                        
                     }
                    
                     //searchFolder.listFoldersDes.Remove(item);
@@ -183,17 +200,25 @@ namespace folderSynch
                 {
                     foreach (var item in searchFolder.listFoldersSource)
                     {
+                        this.prubeh.Dispatcher.Invoke(() => { prubeh.Value = 0; }, System.Windows.Threading.DispatcherPriority.Normal);
 
 
 
                         if (!Directory.Exists(baseDesFolder + item.cestaInside))
                         {
                             Directory.CreateDirectory(baseDesFolder + item.cestaInside);
+                            DirectoryInfo df1 = new DirectoryInfo(baseDesFolder + item.cestaInside);
+                            df1.Attributes = new DirectoryInfo(item.cesta).Attributes;
 
 
                         }
                         folders.destinacionFolder = baseDesFolder + item.cestaInside;
-                        folders.sourseFolder = item.cesta;
+                      
+                        this.desPath.Dispatcher.Invoke(() =>
+                        {
+                            desPath.Content = folders.destinacionFolder;
+                        }, System.Windows.Threading.DispatcherPriority.Normal);
+                            folders.sourseFolder = item.cesta;
                         Thread.Sleep(250);
 
 
@@ -450,19 +475,17 @@ namespace folderSynch
 
             if (st1.ShowDialog() == true)
             {
-
+                MainWindow mainWindow = new MainWindow();
+                Application.Current.MainWindow = mainWindow;
+                mainWindow.Show();
+                this.Close();
 
             }
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private void checkBoxSynchFolders_Checked(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() =>
-            {
-                searchFolder.findFolders(folders.sourseFolder, searchFolder.listFoldersSource, folders.sourseFolder);
-
-            });
-            return;
+            folders.synchAllFoldes = checkBoxSynchFolders.IsChecked.Value;
         }
     }
 

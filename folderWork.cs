@@ -17,15 +17,16 @@ namespace folderSynch
         public string cestaInside { get; set; }
         public bool zkopitovano = false;
 
+
     }
     static class searchFolder
     {
         public static List<infoFolder> listFoldersSource = new List<infoFolder>();
         public static List<infoFolder> listFoldersDes = new List<infoFolder>();
-        static public void findFolders(  string cesta, List<infoFolder> listFolders, string mainCesta)
+        static public void findFolders(string cesta, List<infoFolder> listFolders, string mainCesta)
         {
-            
-           
+
+
             foreach (string item in Directory.GetFileSystemEntries(cesta))
             {
 
@@ -62,6 +63,7 @@ namespace folderSynch
         public static int timeToSynch = 900000;
         public static string jmenoInstance { get; set; }
         public static bool bootOnStartup = false;
+        public static bool synchAllFoldes = false;
         public static int pocetZmen = 0;
         public static string jsemCesta { get { return Directory.GetCurrentDirectory(); } set { jsemCesta = value; } }
 
@@ -101,6 +103,7 @@ namespace folderSynch
                 st1.WriteLine($"Time to Synch:* {timeToSynch}");
                 st1.WriteLine($"Instance:* {jmenoInstance}");
                 st1.WriteLine($"Statup:* {bootOnStartup}");
+                st1.WriteLine($"Synch Folders:* {synchAllFoldes}");
 
 
 
@@ -116,35 +119,46 @@ namespace folderSynch
         {       //pokud cesta existuje
             if (File.Exists(jsemCesta + "\\" + "setting.txt"))
             {
-                //udělá se stream reader a ten poté přečte celý soubor 
-                using (StreamReader st1 = new StreamReader(jsemCesta + "\\" + "setting.txt"))
+                try
                 {
-                    string line;
-                    string[] parts = new string[5];
-                    int pomoc = 0;
-                    while ((line = st1.ReadLine()) != null)
+
+
+                    //udělá se stream reader a ten poté přečte celý soubor 
+                    using (StreamReader st1 = new StreamReader(jsemCesta + "\\" + "setting.txt"))
                     {
-                        //splitne a druhá čast se uloži
-                        parts[pomoc] = line.Split(new string[] { ":*" }, System.StringSplitOptions.None)[1];
-                        pomoc++;
+                        string line;
+                        string[] parts = new string[6];
+                        int pomoc = 0;
+                        while ((line = st1.ReadLine()) != null)
+                        {
+                            //splitne a druhá čast se uloži
+                            parts[pomoc] = line.Split(new string[] { ":*" }, System.StringSplitOptions.None)[1];
+                            pomoc++;
+                        }
+                        folders.sourseFolder = parts[0].Trim();
+                        folders.destinacionFolder = parts[1].Trim();
+                        folders.timeToSynch = int.Parse(parts[2].Trim());
+                        folders.jmenoInstance = parts[3].Trim();
+                        folders.bootOnStartup = bool.Parse(parts[4].Trim());
+                        folders.synchAllFoldes = bool.Parse(parts[5].Trim());
+
                     }
-                    folders.sourseFolder = parts[0].Trim();
-                    folders.destinacionFolder = parts[1].Trim();
-                    folders.timeToSynch = int.Parse(parts[2].Trim());
-                    folders.jmenoInstance = parts[3].Trim();
-                    folders.bootOnStartup = bool.Parse(parts[4].Trim());
+                    if (!string.IsNullOrEmpty(folders.sourseFolder))
+                    {
+                        MainWindow.Instance.sourcePath.Content = $"Cesta: : {folders.sourseFolder}";
+                    }
+                    if (!string.IsNullOrEmpty(folders.destinacionFolder))
+                    {
+                        MainWindow.Instance.desPath.Content = $"Cesta: : {folders.destinacionFolder}";
+                    }
+                    
 
                 }
-                if (!string.IsNullOrEmpty(folders.sourseFolder))
+                catch (Exception err)
                 {
-                    MainWindow.Instance.sourcePath.Content = $"Cesta: : {folders.sourseFolder}";
-                }
-                if (!string.IsNullOrEmpty(folders.destinacionFolder))
-                {
-                    MainWindow.Instance.desPath.Content = $"Cesta: : {folders.destinacionFolder}";
-                }
 
-
+                    System.Windows.Forms.MessageBox.Show(err.Message, "Error with reading file", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                }
             }
 
         }

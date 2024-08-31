@@ -80,7 +80,7 @@ namespace folderSynch
 
         }
 
-        static public async void copyFiles(ProgressBar pb1)
+        public static async void copyFiles(ProgressBar pb1)
         {
             Task t1 = Task.Run(() =>
             {

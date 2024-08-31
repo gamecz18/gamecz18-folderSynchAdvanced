@@ -42,7 +42,9 @@
             <ComboBox Name="time_to_Synch" FontSize="18"></ComboBox>
             <Label>Name of APP (tray name)</Label>
             <TextBox x:Name="inputTextBox" FontSize="24"></TextBox>
-            <CheckBox x:Name="bootChechBox" Margin="0,20,0,0" FontSize="16" Content="Turn on whe boot up" Checked="bootChechBox_Checked"></CheckBox>
+            <CheckBox x:Name="bootChechBox" Margin="0,20,0,0" FontSize="16" Content="Turn on when booting up" Checked="bootChechBox_Checked"></CheckBox>
+            <CheckBox x:Name="foldersSynch" Margin="0,20,0,0" FontSize="16" Content="Synch folders inside folders"/>
+
 
         </StackPanel>
         <Button Content="Save" FontSize="30" HorizontalAlignment="Right"  VerticalAlignment="Bottom" Click="Button_Click" Margin="0,0,10,10" Height="43" Width="113"/>

@@ -34,6 +34,11 @@ namespace folderSynch
             {
                 bootChechBox.IsChecked = folders.bootOnStartup;
             }
+
+            if (folders.bootOnStartup != null)
+            {
+                foldersSynch.IsChecked = folders.synchAllFoldes;
+            }
           
            
             
@@ -52,10 +57,22 @@ namespace folderSynch
         void saveSeting()
         {
             folders.timeToSynch = int.Parse(time_to_Synch.SelectedValue.ToString()) * 60000;
+            //jmeno instance v liste
             if (!string.IsNullOrEmpty(inputTextBox.Text))
             {
                 folders.jmenoInstance = inputTextBox.Text;
             }
+            if (foldersSynch.IsChecked.Value)
+            {
+                folders.synchAllFoldes = true;
+            }
+            else
+            {
+                folders.synchAllFoldes = false;
+            }
+
+
+            //
             if (bootChechBox.IsChecked.Value)
             {
                 folders.bootOnStartup = true;
@@ -65,6 +82,8 @@ namespace folderSynch
             {
                 folders.bootOnStartup = false;
             }
+            
+          
 
 
 
@@ -77,8 +96,10 @@ namespace folderSynch
             {
                 System.Windows.Forms.MessageBox.Show("One folder or more folders are not selected.", "Warning", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                 bootChechBox.IsChecked = false;
-
+                
             }
         }
+
+       
     }
 }
