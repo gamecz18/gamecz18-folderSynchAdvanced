@@ -1,6 +1,6 @@
 # FolderSync
 
-FolderSync is an application designed to synchronize one folder to another seamlessly. When synchronizing, the app copies data from the source folder to the destination folder.
+FolderSync is an application designed to synchronize one folder or more to another seamlessly. When synchronizing, the app copies data from the source folder to the destination folder.
 
 ## Features
 
