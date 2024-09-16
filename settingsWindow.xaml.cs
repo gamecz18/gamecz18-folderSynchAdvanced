@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 
 namespace folderSynch
@@ -100,6 +101,11 @@ namespace folderSynch
             }
         }
 
-       
+        private void reset_Click(object sender, RoutedEventArgs e)
+        {
+            File.Delete(folders.jsemCesta + "\\" + "setting.txt");
+            DialogResult = true;
+            this.Close();
+        }
     }
 }

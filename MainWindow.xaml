@@ -33,12 +33,24 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="0.6*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Grid.RowSpan="6" Grid.ColumnSpan="6" BorderBrush="DarkRed" BorderThickness="5,0,0,0" HorizontalAlignment="Center" />
-        <StackPanel Background="PowderBlue" Grid.ColumnSpan="4" Grid.Column="0" Panel.ZIndex="0" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Border Panel.ZIndex="0" Grid.Column="0" Grid.RowSpan="6" Grid.ColumnSpan="6" BorderBrush="DarkRed" BorderThickness="5,0,0,0" HorizontalAlignment="Center" />
+        <StackPanel   Background="PowderBlue" Grid.ColumnSpan="4" Grid.Column="0" Panel.ZIndex="0" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
-            <ProgressBar x:Name="prubeh" Margin="0,10,0,0" Height="20" />
+
+            <ProgressBar  x:Name="prubeh" Margin="0,10,0,0" Height="20" />
+
             <CheckBox x:Name="checkBoxSynchFolders" Content="Synch folders inside folders" Checked="checkBoxSynchFolders_Checked"/>
+
+
+
         </StackPanel>
+        <Grid  Name="synchBox" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Background="AliceBlue" Width="196" >
+           
+            <Label Name="synchlabel" Content="Synchronization"  HorizontalAlignment="Left" Margin="18,5,0,0" VerticalAlignment="Top" FontFamily="Bahnschrift SemiBold" FontWeight="Bold" FontSize="20" />
+            
+
+
+        </Grid>
 
 
         <ListView Background="DarkGray" x:Name="desctiFilesView" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="1" Grid.RowSpan="3">
@@ -65,8 +77,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.6*"></ColumnDefinition>
                 <ColumnDefinition ></ColumnDefinition>
-                <ColumnDefinition> </ColumnDefinition>
-                <ColumnDefinition Width="1.3*" >  </ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="1.3*" ></ColumnDefinition>
                 <ColumnDefinition  ></ColumnDefinition>
                 <ColumnDefinition  ></ColumnDefinition>
                 <ColumnDefinition Width="1.6*" ></ColumnDefinition>
@@ -83,9 +95,9 @@
 
             <Button  Grid.Column="6" Name="buttonDes"  Content="des. folder select"   Click="buttonDes_Click"   MinHeight="20"/>
         </Grid>
-        <StackPanel Grid.Column="2" Panel.ZIndex="0" Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <StackPanel Grid.Column="2" Panel.ZIndex="0" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Label Content="Počet s.:" x:Name="desCount"/>
-            <Label Content="Cesta: " HorizontalAlignment="Left" x:Name="desPath" Width="398"/>
+            <Label Content="Cesta: " Panel.ZIndex="3" HorizontalAlignment="Left" x:Name="desPath" />
 
         </StackPanel>
         <Button x:Name="reloadButton" Grid.Column="3" Content="Reload" HorizontalAlignment="Right" Grid.Row="4" VerticalAlignment="Top" Width="61" Click="reloadButton_Click"/>

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using Forms = System.Windows.Forms;
 using Path = System.IO.Path;
 
@@ -14,18 +16,20 @@ namespace folderSynch
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {//slouží pro pracovaní s tímto oknem u jiných knihove(UI prvky)
+    {
+        //slouží pro pracovaní s tímto oknem u jiných knihove(UI prvky)
         public static MainWindow Instance;
-
         //slouží pro vytvoření notifikační ikony
         private readonly Forms.NotifyIcon _nf;
         public MainWindow()
         {
             InitializeComponent();
-            folders.loadSettings();
-
-            //slouží pro pracovaní s tímto oknem u jiných knihove(UI prvky)
+            
             Instance = this;
+            folders.loadSettings();
+            synchBox.IsEnabled = false;
+            //slouží pro pracovaní s tímto oknem u jiných knihove(UI prvky)
+          
             //notifikační ikona
             _nf = new Forms.NotifyIcon();
             _nf.Icon = new System.Drawing.Icon("images/icon.ico");
@@ -138,11 +142,15 @@ namespace folderSynch
 
 
             disEnabElement(false);
+            synchBox.IsEnabled = true;
+            synchlabel.Foreground = new SolidColorBrush(Colors.Red);
+            
             if (folders.synchAllFoldes)
             {
 
                 searchFolder.listFoldersSource.Clear();
                 searchFolder.listFoldersDes.Clear();
+                //slouží pro načtení všech des a source složek
                 Task T1 = new Task(() =>
                 {
 
@@ -157,6 +165,7 @@ namespace folderSynch
                 });
                 T1.Start();
                 T2.Start();
+                //aby vše proběhlo synchroně
 
                 await Task.Run(() =>
                 {
@@ -186,7 +195,7 @@ namespace folderSynch
                         {
                             if (deleteTry)
                             {
-                                MessageBox.Show(err.Message + " Folder: " + (baseDesFolder + item.cestaInside), "This file can not be deleted try running as admin", MessageBoxButton.OK, MessageBoxImage.Stop);
+                                MessageBox.Show(err.Message + " Folder: " + (baseDesFolder + item.cestaInside), "Error in deteting folders", MessageBoxButton.OK, MessageBoxImage.Stop);
                                 deleteTry = !deleteTry;
                             }
 
@@ -209,11 +218,13 @@ namespace folderSynch
                             Directory.CreateDirectory(baseDesFolder + item.cestaInside);
                             DirectoryInfo df1 = new DirectoryInfo(baseDesFolder + item.cestaInside);
                             df1.Attributes = new DirectoryInfo(item.cesta).Attributes;
-
+                            
 
                         }
                         folders.destinacionFolder = baseDesFolder + item.cestaInside;
-                      
+                        DirectoryInfo df2 = new DirectoryInfo(baseDesFolder + item.cestaInside);
+                        df2.CreationTime = new DirectoryInfo(item.cesta).CreationTime;
+                        df2.LastWriteTime = new DirectoryInfo(item.cesta).LastWriteTime;
                         this.desPath.Dispatcher.Invoke(() =>
                         {
                             desPath.Content = folders.destinacionFolder;
@@ -259,6 +270,8 @@ namespace folderSynch
 
                     }
                 });
+                synchlabel.Foreground = new SolidColorBrush(Colors.Gray);
+                synchBox.IsEnabled = false;
                 disEnabElement(true);
             }
             else
@@ -398,13 +411,13 @@ namespace folderSynch
         CancellationTokenSource cts1 = new CancellationTokenSource();
         void synchOnBackgourd()
         {
-            Task.Run(() =>
+            Task.Run(async () =>
             {
 
 
                 while (true)
                 {
-                    sych();
+                     sych();
 
                     Thread.Sleep(folders.timeToSynch);
                     if (ct1.IsCancellationRequested)
