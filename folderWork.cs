@@ -208,6 +208,7 @@ namespace folderSynch
     {
 
 
+
         private class node
         {
             public string nazev { get; set; }
