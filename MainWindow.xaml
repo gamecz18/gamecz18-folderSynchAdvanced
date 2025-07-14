@@ -16,8 +16,30 @@
 
 
         </Style>
+
+        <!-- Šablona pro šipku nahoru -->
+        <DataTemplate x:Key="HeaderTemplateArrowUp">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="{Binding}" VerticalAlignment="Center" />
+                <Path Fill="Black" Width="10" Height="10" Margin="5,0,0,0" 
+                 Data="M0,10 L10,10 5,0 Z" VerticalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+
+        <!-- Šablona pro šipku dolů -->
+        <DataTemplate x:Key="HeaderTemplateArrowDown">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="{Binding}" VerticalAlignment="Center" />
+                <Path Fill="Black" Width="12" Height="12" Margin="5,0,0,0" 
+                  Data="M0,0 L10,0 5,10 Z" VerticalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+
+
+
     </Window.Resources>
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray">
+
+    <Grid  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray">
 
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -34,46 +56,27 @@
             <ColumnDefinition Width="0.6*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Border Panel.ZIndex="0" Grid.Column="0" Grid.RowSpan="6" Grid.ColumnSpan="6" BorderBrush="DarkRed" BorderThickness="5,0,0,0" HorizontalAlignment="Center" />
-        <StackPanel   Background="PowderBlue" Grid.ColumnSpan="4" Grid.Column="0" Panel.ZIndex="0" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <StackPanel    Background="PowderBlue" Grid.ColumnSpan="4" Grid.Column="0" Panel.ZIndex="0" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
 
             <ProgressBar  x:Name="prubeh" Margin="0,10,0,0" Height="20" />
 
-            <CheckBox x:Name="checkBoxSynchFolders" Content="Synch folders inside folders" Checked="checkBoxSynchFolders_Checked"/>
 
 
 
         </StackPanel>
         <Grid  Name="synchBox" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="40" Background="AliceBlue" Width="196" >
-           
+
             <Label Name="synchlabel" Content="Synchronization"  HorizontalAlignment="Left" Margin="18,5,0,0" VerticalAlignment="Top" FontFamily="Bahnschrift SemiBold" FontWeight="Bold" FontSize="20" />
-            
+
 
 
         </Grid>
 
 
-        <ListView Background="DarkGray" x:Name="desctiFilesView" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="1" Grid.RowSpan="3">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="350"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <ListView Background="DarkGray" x:Name="sourceFilesView" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="3">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="350"/>
-
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Label Content="Počet s.:" Name="sourceCount"  Grid.Column="0" Grid.Row="4" HorizontalAlignment="Stretch"  />
-        <Label Content="Cesta: " Grid.ColumnSpan="2" Panel.ZIndex="3" Name="sourcePath" Grid.Column="0" Grid.Row="4" Margin="0,28,0,5" />
 
 
-
-        <Grid VerticalAlignment="Stretch"  Grid.Column="0" Grid.ColumnSpan="4"  Grid.RowSpan="2" Grid.Row="5">
+        <Grid VerticalAlignment="Stretch"   Grid.Column="0" Grid.ColumnSpan="4"  Grid.RowSpan="2" Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.6*"></ColumnDefinition>
                 <ColumnDefinition ></ColumnDefinition>
@@ -86,21 +89,305 @@
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <Button  Grid.Column="0" x:Name="buttonSec"   Content="source folder select"   Click="buttonSec_Click" MinHeight="20" />
-            <Button x:Name="synchButton" Grid.Column="1" Padding="0,0,0,2" Content="synch once"  FontFamily="Bahnschrift SemiBold" Click="synchButton_Click"  />
-            <Button x:Name="settingsButton" Grid.Column="2" Padding="0,0,0,2" Content="Settings"   FontFamily="Bahnschrift SemiBold" Click="settingsButton_Click"/>
+            <Button  Grid.Column="0" x:Name="buttonSec"   Content="Vybrat zdroj"   Click="buttonSec_Click" MinHeight="20" />
+            <Button x:Name="settingsButton" Grid.Column="2" Padding="0,0,0,2" Content="Nastavení"   FontFamily="Bahnschrift SemiBold" Click="settingsButton_Click"/>
             <Button Grid.Column="3" x:Name="synchOnBackButton" Padding="0,0,0,2" Content="synch on backround"   Click="synchOnBackButton_Click"/>
-            <Button Grid.Column="4" x:Name="saveSesButton"  Padding="0,0,0,2" Content="Save setting"  Click="saveSesButton_Click"/>
-            <Button Grid.Column="5" x:Name="loadSesButton" Padding="0,0,0,2" Content="Load setting"   Click="loadSesButton_Click"/>
+            <Button Grid.Column="4" x:Name="saveSesButton"  Padding="0,0,0,2" Content="Uložit nastavení"  Click="saveSesButton_Click"/>
+            <Button Grid.Column="5" x:Name="loadSesButton" Padding="0,0,0,2" Content="Načíst nastavení"   Click="loadSesButton_Click"/>
 
-            <Button  Grid.Column="6" Name="buttonDes"  Content="des. folder select"   Click="buttonDes_Click"   MinHeight="20"/>
+            <Button  Grid.Column="6" Name="buttonDes"  Content="Vybrat cíl"   Click="buttonDes_Click"   MinHeight="20"/>
+            <Button x:Name="synchButton" Grid.Column="1" Padding="0,0,0,2" Content="Synchronizovat"  FontFamily="Bahnschrift SemiBold" Click="synchButton_Click"   VerticalAlignment="Stretch" />
         </Grid>
-        <StackPanel Grid.Column="2" Panel.ZIndex="0" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <Label Content="Počet s.:" x:Name="desCount"/>
-            <Label Content="Cesta: " Panel.ZIndex="3" HorizontalAlignment="Left" x:Name="desPath" />
 
-        </StackPanel>
-        <Button x:Name="reloadButton" Grid.Column="3" Content="Reload" HorizontalAlignment="Right" Grid.Row="4" VerticalAlignment="Top" Width="61" Click="reloadButton_Click"/>
+
+        <TabControl  SelectionChanged="tabControl_SelectionChanged"  x:Name="tab" Margin="0,-20,0,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="4" Foreground="Black" BorderBrush="Red" Background="#FF3A0000" BorderThickness="4,4,4,4" SelectedIndex="1">
+            <TabItem x:Name="tabBasic" Header="Základní" BorderBrush="#FF590808" Background="PowderBlue" FontFamily="Bahnschrift SemiBold" OpacityMask="#FFAF2323" >
+
+                <Grid Background="#FFE5E5E5">
+                    <Grid Background="#FFAF3939">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="0.2*"></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <ListView Grid.Column="1" Background="DarkGray" x:Name="desctiFilesView" d:ItemsSource="{d:SampleData ItemCount=5}" ItemsSource="{Binding Entries}"   >
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding nazev}" Width="350"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+
+
+
+                            <StackPanel x:Name="levaPrava" Grid.Column="0" Panel.ZIndex="0" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+                                <Label  Content="Počet souborů::" Name="sourceCount"   HorizontalAlignment="Stretch"  />
+                                <Label  Content="Cesta: "  Name="sourcePath"  />
+                            </StackPanel>
+                            <ListView Grid.Column="0" Background="DarkGray" x:Name="sourceFilesView" d:ItemsSource="{d:SampleData ItemCount=5}"  >
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding nazev}" Width="350"/>
+
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <StackPanel x:Name="stackPrava" Grid.Column="1" Panel.ZIndex="0" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <Label Content="Cesta: " Panel.ZIndex="3" HorizontalAlignment="Left" x:Name="desPath" />
+                                <Label Content="Počet souborů::" x:Name="desCount"/>
+
+                            </StackPanel>
+                            <Button x:Name="reloadButton" HorizontalAlignment="Right" VerticalAlignment="Top"  Grid.Column="1" Grid.Row="1" Height="20" Content="Reload" Width="62" Click="reloadButton_Click"/>
+                            <CheckBox x:Name="checkBoxSynchFolders" Content="Synchronizovat složky ve složkách" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top"  Grid.Row="1" Margin="0,25,5,0" Checked="checkBoxSynchFolders_Checked"/>
+                        </Grid>
+
+
+                    </Grid>
+
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabFiding" Header="Hledání" FontFamily="Bahnschrift SemiBold" Background="PowderBlue" OpacityMask="#FFAF2323" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,0,0,0" Width="55" >
+                <Grid Background="#FFE5E5E5">
+                    <Grid >
+
+                        <Grid Background="#AFAF2328">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="0.9*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions  >
+                                <RowDefinition Height="0.05*"></RowDefinition>
+                                <RowDefinition Height="0.3*"></RowDefinition>
+                                <RowDefinition Height="0.06*"></RowDefinition>
+
+                                <RowDefinition Height="0.06*"></RowDefinition>
+                                <RowDefinition Height="0.06*"></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel  Grid.Column="3" Grid.ColumnSpan="2" Panel.ZIndex="0" Grid.Row="0" Grid.RowSpan="2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+
+
+                                <ComboBox Margin="5,5,0,0" Name="comboBoxInfomace" Height="20" Width="120" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedIndex="0">
+                                    <!--<ComboBoxItem Tag="existuji" Content="Existují" />
+    <ComboBoxItem Tag="existujiVelikostJina" Content="Existují – jiná velikost" />
+    <ComboBoxItem Tag="nexistuji" Content="Neexistují" />
+    <ComboBoxItem Tag="sameHash" Content="Stejný hash" />
+    <ComboBoxItem Tag="neznama" Content="Neznámé" /> -->
+
+                                </ComboBox>
+                                <Separator Margin="10,5" Height="2" Background="Black"/>
+                                <Label   Content="Cesta source: "  Name="sourcePath2"  />
+                                <Label  Content="Cesta des.: "  Name="desPath2"  />
+                            </StackPanel>
+
+                            <Button x:Name="deleteSame" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Grid.Column="3" Grid.Row="2"  Click="deleteSame_Click" >
+
+                                <TextBlock Text="Odstranit duplicitní položky" TextAlignment="Center" TextWrapping="Wrap">
+
+
+                                </TextBlock>
+                                   
+                            </Button>
+                            <Button x:Name="deleteSameFromDisk"  Grid.Column="4" Grid.Row="2"  Click="deleteSameFromDisk_Click"  >
+
+                                <TextBlock Text="Odstranit duplicitní položky z disku" TextAlignment="Center" TextWrapping="Wrap">
+
+
+                                </TextBlock>
+
+                            </Button>
+
+                            <Button x:Name="deleteSelected"  Grid.Column="3" Grid.Row="4"  Click="deleteSelected_Click"    >
+                                <TextBlock Text="Smazat vybrané položky" TextAlignment="Center" TextWrapping="Wrap">
+
+
+                                </TextBlock>
+
+
+                            </Button>
+                            <Button x:Name="deleteSelectedFromDisk"  Grid.Column="4" Grid.Row="4" Click="deleteSelectedFromDisk_Click"  >
+                                <TextBlock Text="Smazat vybrané položky z disku" TextAlignment="Center" TextWrapping="Wrap">
+
+
+                                </TextBlock>
+
+
+                            </Button>
+
+
+                            <Button x:Name="copySelected" HorizontalAlignment="Stretch"  Grid.ColumnSpan="2" VerticalAlignment="Stretch" Grid.Column="3" Grid.Row="3" Content="Kopírovat vybrané položky" Click="copySelected_Click" />
+
+                            <Button x:Name="selectButton" Grid.Column="5" Grid.Row="2"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="selectButton_Click"   >
+                                <TextBlock Text="Vybrat položky" TextWrapping="Wrap" TextAlignment="Center"/>
+                            </Button>
+
+                            <Button x:Name="unselectButton" Grid.Column="5" Grid.Row="3" VerticalAlignment="Stretch" Click="unselectButton_Click"   >
+
+                                <TextBlock Text="Zrušit výběr" TextWrapping="Wrap" TextAlignment="Center"/>
+                            </Button>
+
+                            <StackPanel Grid.Column="5" Panel.ZIndex="0" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <TextBlock Text="Počet souborů podle kategorie:" FontSize="14" Margin="0,0,0,5" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+
+                                <Separator Margin="10,5" Height="2" Background="Black"/>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="✅" FontSize="14" Margin="0,0,5,0" VerticalAlignment="Center"/>
+
+                                    <Label Content="Stejný hash:"  FontSize="12"/>
+                                    <Label Content="0" Name="countSameHash" FontSize="12"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="⚠️" FontSize="14" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                    <Label Content="Jiná velikost:"  FontSize="12"/>
+                                    <Label Content="0" Name="countDifferentSize" FontSize="12"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="❌" FontSize="14" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                    <Label Content="Neexistují:"  FontSize="12"/>
+                                    <Label Content="0" Name="countNotExist" FontSize="12"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="📁" FontSize="14" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                    <Label Content="Existují:"  FontSize="12"/>
+                                    <Label Content="0" Name="countExist" FontSize="12"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="❓" FontSize="14" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                    <Label Content="Neznámé:"  FontSize="12"/>
+                                    <Label Content="0" Name="countUnknown" FontSize="12"/>
+                                </StackPanel>
+                            </StackPanel>
+
+
+                            <TabControl TabIndex="1" Grid.ColumnSpan="3" Margin="0,-4,0,0" Grid.Column="0" Grid.RowSpan="5" >
+
+                                <TabItem Header="Basic View" Height="15" VerticalAlignment="Top"  BorderBrush="#FF590808" Background="PowderBlue" FontFamily="Bahnschrift SemiBold" OpacityMask="#FFAF2323" >
+                                    <ListView     Panel.ZIndex="1" Grid.ColumnSpan="3" Grid.Column="0"  Background="#AFAF2328" Foreground="Black" x:Name="sourceFilesViewFind" 
+             d:ItemsSource="{d:SampleData ItemCount=5}"  Grid.RowSpan="5" 
+             GridViewColumnHeader.Click="GridViewColumnZmenaZareniClickedHandler" SelectionChanged="sourceFilesViewFind_SelectionChanged">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter  Property="Background" Value="{Binding Pozadi}" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+
+                                    <ListView.View>
+                                        <GridView>
+
+                                            <GridViewColumn   DisplayMemberBinding="{Binding Path=nazev}" Header="Nazev"   Width="Auto" />
+                                            <!--<GridViewColumn   DisplayMemberBinding="{Binding hash}" Header="Hash"  Width="Auto"/>#endregion-->
+                                            <!--<GridViewColumn  DisplayMemberBinding="{Binding Path=operace}" Header="Operace"  Width="Auto"/>-->
+
+                                            
+                                                <GridViewColumn Header="Operace" Width="Auto">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding ikona}" FontSize="10" Margin="0,0,5,0"/>
+                                                            <TextBlock Text="{Binding operace}" VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+
+                                            <GridViewColumn  DisplayMemberBinding="{Binding Path=cesta}" Header="Cesta"  Width="Auto" />
+                                            <GridViewColumn Header="Cesta destnation" Width="Auto" DisplayMemberBinding="{Binding Path=copyDes}"  />
+                                                <GridViewColumn  Header="Vybrat" Width="80" >
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox IsChecked="{Binding Path=IsChecked}" Click="CheckBox_Click" />
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                              
+
+
+                                            </GridView>
+                                    </ListView.View>
+
+                                </ListView>
+                                </TabItem>
+                                <TabItem Header="Detail View" Height="15" VerticalAlignment="Top"  BorderBrush="#FF590808" Background="PowderBlue" FontFamily="Bahnschrift SemiBold" OpacityMask="#FFAF2323">
+
+                                    <TreeView Background="#FF590808"    d:ItemsSource="{d:SampleData ItemCount=5}"  x:Name="TreeViewSource"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                        <TreeView.Resources>
+                                            <Style TargetType="TreeViewItem">
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </Style>
+                                        </TreeView.Resources>
+
+
+                                        <TreeView.ItemTemplate >
+                                            <HierarchicalDataTemplate  ItemsSource="{Binding children}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding icona}"/>
+                                                    <TextBlock Text="{Binding nazev}"/>
+                                                </StackPanel>
+                                            </HierarchicalDataTemplate>
+                                        </TreeView.ItemTemplate>
+
+
+
+                                    </TreeView>
+                                </TabItem>
+
+
+                            </TabControl>
+
+                            
+
+                            <Grid Grid.Row="0" Grid.Column="2"  >
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="22*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="2*"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+
+
+
+                                <!-- { op.existuji,  op.existujiVelikostJina, op.nexistuji, op.sameHash, op.neznama }; -->
+
+
+
+                            </Grid>
+                            <Button Grid.Column="5" Content="Button" HorizontalAlignment="Left" Margin="44,20,0,0" Grid.Row="4" VerticalAlignment="Top" Click="Button_Click"/>
+
+                        </Grid>
+
+
+                    </Grid>
+
+                </Grid>
+
+            </TabItem>
+            <TabItem x:Name="tabSifrovani" Header="Šifrování" FontFamily="Bahnschrift SemiBold" Background="PowderBlue" OpacityMask="#FFAF2323" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,0,0,0" Width="60" >
+                
+            </TabItem>
+        
+        </TabControl>
     </Grid>
 
 </Window>

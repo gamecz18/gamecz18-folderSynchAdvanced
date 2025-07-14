@@ -18,27 +18,27 @@ namespace folderSynch
                 time_to_Synch.Items.Add(i).ToString();
 
             }
-            if (folders.timeToSynch == null)
+            if (settings.timeToSynch == null)
             {
                 time_to_Synch.SelectedIndex = 14;
             }
             else
             {
-                time_to_Synch.SelectedIndex = (folders.timeToSynch/ 60000) - 1;
+                time_to_Synch.SelectedIndex = (settings.timeToSynch / 60000) - 1;
 
             }
-            if (!string.IsNullOrEmpty(folders.jmenoInstance))
+            if (!string.IsNullOrEmpty(settings.jmenoInstance))
             {
-                inputTextBox.Text = folders.jmenoInstance;
+                inputTextBox.Text = settings.jmenoInstance;
             }
-            if (folders.bootOnStartup != null)
+            if (settings.bootOnStartup != null)
             {
-                bootChechBox.IsChecked = folders.bootOnStartup;
+                bootChechBox.IsChecked = settings.bootOnStartup;
             }
 
-            if (folders.bootOnStartup != null)
+            if (settings.bootOnStartup != null)
             {
-                foldersSynch.IsChecked = folders.synchAllFoldes;
+                foldersSynch.IsChecked = settings.synchAllFoldes;
             }
           
            
@@ -57,31 +57,31 @@ namespace folderSynch
 
         void saveSeting()
         {
-            folders.timeToSynch = int.Parse(time_to_Synch.SelectedValue.ToString()) * 60000;
+            settings.timeToSynch = int.Parse(time_to_Synch.SelectedValue.ToString()) * 60000;
             //jmeno instance v liste
             if (!string.IsNullOrEmpty(inputTextBox.Text))
             {
-                folders.jmenoInstance = inputTextBox.Text;
+                settings.jmenoInstance = inputTextBox.Text;
             }
             if (foldersSynch.IsChecked.Value)
             {
-                folders.synchAllFoldes = true;
+                settings.synchAllFoldes = true;
             }
             else
             {
-                folders.synchAllFoldes = false;
+                settings.synchAllFoldes = false;
             }
 
 
             //
             if (bootChechBox.IsChecked.Value)
             {
-                folders.bootOnStartup = true;
+                settings.bootOnStartup = true;
                 folders.creteBoot();
             }
             else
             {
-                folders.bootOnStartup = false;
+                settings.bootOnStartup = false;
             }
             
           
@@ -93,7 +93,7 @@ namespace folderSynch
         private void bootChechBox_Checked(object sender, RoutedEventArgs e)
         {
 
-            if (string.IsNullOrEmpty(folders.destinacionFolder) || string.IsNullOrEmpty(folders.sourseFolder))
+            if (string.IsNullOrEmpty(settings.destinacionFolder) || string.IsNullOrEmpty(settings.sourseFolder))
             {
                 System.Windows.Forms.MessageBox.Show("One folder or more folders are not selected.", "Warning", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                 bootChechBox.IsChecked = false;
@@ -103,7 +103,7 @@ namespace folderSynch
 
         private void reset_Click(object sender, RoutedEventArgs e)
         {
-            File.Delete(folders.jsemCesta + "\\" + "setting.txt");
+            File.Delete(settings.jsemCesta + "\\" + "setting.txt");
             DialogResult = true;
             this.Close();
         }
