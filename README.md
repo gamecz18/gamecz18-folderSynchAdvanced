@@ -19,3 +19,5 @@ FolderSync is an application designed to synchronize one folders or more to anot
 
 1. **Delete the Installation Folder**: Remove the folder containing `folderSynch.exe`.
 2. **Disable Startup Boot (if enabled)**: If you enabled the option to boot on startup, navigate to the directory shown when you enabled this feature and remove the startup entry.
+
+
